@@ -37,3 +37,14 @@ func (scanHistory *ScanHistory) Create() error {
 	}
 	return scanHistoryTable.Insert(scanHistory)
 }
+
+func GetByID(id string) *ScanHistory {
+	var scanHistory *ScanHistory
+	scanHistoryTable.FindId(id).One(&scanHistory)
+	if scanHistory == nil {
+		return &ScanHistory{
+			NumberOfScan: 0,
+		}
+	}
+	return scanHistory
+}
