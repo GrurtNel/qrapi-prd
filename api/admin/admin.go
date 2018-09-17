@@ -92,7 +92,6 @@ func (s *AdminServer) generateCSV(c *gin.Context) {
 			wr.Write(record)
 		}
 	}
-
 	wr.Flush()                                        // writes the csv writer data to  the buffered data io writer(b(bytes.buffer))
 	c.Writer.Header().Set("Content-Type", "text/csv") // setting the content type header to text/csv
 	c.Writer.Header().Set("Content-Type", "text/csv")
