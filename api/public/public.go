@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/glog"
 	"qrapi-prd/common"
 	"qrapi-prd/g/x/web"
 	"qrapi-prd/o/admin"
@@ -52,8 +51,8 @@ func (s *PublicServer) scanProduct(c *gin.Context) {
 	var id = c.Query("id")
 	var code = c.Query("code")
 	var orderID = c.Query("order_id")
-	var lat = c.Query("lat")
-	var lng = c.Query("lng")
+	// var lat = c.Query("lat")
+	// var lng = c.Query("lng")
 	if code != "" {
 		id = id + code
 	}
@@ -74,22 +73,17 @@ func (s *PublicServer) scanProduct(c *gin.Context) {
 	if err != nil || product == nil {
 		web.AssertNil(errNotValidCode)
 	}
-	scanHistory := sHistory.GetByID(id)
 	//write scan history
 	{
-		go func() {
-			var insertedScanHistory = &sHistory.ScanHistory{
-				OrderID:   orderID,
-				ProductID: productID,
-			}
-			//check first scan
-			if scanHistory.NumberOfScan == 0 {
-				glog.Info(lat, lng)
-			}
-			insertedScanHistory.SetID(id)
-			insertedScanHistory.Create()
-		}()
+		var insertedScanHistory = &sHistory.ScanHistory{
+			OrderID:   orderID,
+			ProductID: productID,
+		}
+		//check first scan
+		insertedScanHistory.SetID(id)
+		insertedScanHistory.Create()
 	}
+	scanHistory := sHistory.GetByID(id)
 	s.SendData(c, map[string]interface{}{
 		"product":   product,
 		"customer":  customer,
