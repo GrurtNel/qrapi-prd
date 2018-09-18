@@ -26,10 +26,20 @@ func NewAdminServer(parent *gin.RouterGroup, name string) *AdminServer {
 	}
 	s.POST("auth/login", s.login)
 	s.Use(middleware.MustBeAdmin)
-	s.GET("order/list", s.getOrders)
+	//product api
+	s.POST("product/create", s.createProduct)
+	s.GET("product/list", s.getProducts)
+	s.GET("product/delete", s.deleteProduct)
+	s.POST("product/update", s.updateProduct)
+	//order api
 	s.GET("order/delivery", s.deliveryOrder)
-	s.GET("customer/list", s.getCustomers)
+	s.GET("order/list", s.getOrders)
+	s.POST("order/create", s.createOrder)
+	s.POST("order/update", s.updateOrder)
+	s.GET("order/delete", s.deleteOrder)
 	s.GET("order/generate", s.generateCSV)
+	//customer api
+	s.GET("customer/list", s.getCustomers)
 	return &s
 }
 
@@ -46,18 +56,6 @@ func (s *AdminServer) login(c *gin.Context) {
 		"token":     auth.ID,
 		"user_info": user,
 	})
-}
-
-func (s *AdminServer) getOrders(c *gin.Context) {
-	var orders, err = order.GetOrders()
-	web.AssertNil(err)
-	s.SendData(c, orders)
-}
-
-func (s *AdminServer) deliveryOrder(c *gin.Context) {
-	var orderID = c.Query("order_id")
-	web.AssertNil(order.DeliveryOrder(orderID))
-	s.Success(c)
 }
 
 func (s *AdminServer) getCustomers(c *gin.Context) {

@@ -1,7 +1,6 @@
 package order
 
 import (
-	"github.com/golang/glog"
 	"gopkg.in/mgo.v2/bson"
 	"qrapi-prd/x/logger"
 	"qrapi-prd/x/mongodb"
@@ -33,8 +32,10 @@ func (order *Order) Create() error {
 }
 
 func GetOrdersByCustomer(customerID string) ([]*Order, error) {
-	glog.Info(customerID)
 	var orders []*Order
+	if customerID == "" {
+		return GetOrders()
+	}
 	var err = orderTable.FindWhere(bson.M{"customer_id": customerID}, &orders)
 	return orders, err
 }

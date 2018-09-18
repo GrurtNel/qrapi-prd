@@ -30,6 +30,9 @@ func (product *Product) Create() error {
 
 func GetProductsByCustomer(customerID string) ([]*Product, error) {
 	var products []*Product
+	if customerID == "" {
+		return GetProducts()
+	}
 	var err = productTable.FindWhere(bson.M{"customer_id": customerID}, &products)
 	return products, err
 }
@@ -38,4 +41,10 @@ func GetProductByID(id string) (*Product, error) {
 	var product *Product
 	var err = productTable.FindID(id, &product)
 	return product, err
+}
+
+func GetProducts() ([]*Product, error) {
+	var products []*Product
+	var err = productTable.FindAll(&products)
+	return products, err
 }
