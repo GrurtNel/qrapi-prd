@@ -27,5 +27,6 @@ func main() {
 	r.StaticFS("/static", http.Dir("./upload"))
 	api.NewApiServer(r.Group("api"))
 	// Listen and serve on 0.0.0.0:8080
-	r.Run(GetPort())
+	// r.Run(GetPort())
+	r.RunTLS(GetPort(), "cert", "key")
 }
