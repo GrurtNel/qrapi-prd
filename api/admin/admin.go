@@ -68,7 +68,7 @@ func (s *AdminServer) generateCSV(c *gin.Context) {
 	var quantity, _ = strconv.Atoi(c.Query("quantity"))
 	var orderID = c.Query("order_id")
 	var order, err = order.GetOrderByID(orderID)
-	var endpointCheck = "http://app.qrcode-united.com/app/#/product/scan?type=qrcode-3&order_id=" + orderID + "&id="
+	var endpointCheck = "http://app.qrcode-united.com/app/#/product/scan?type=" + order.Type + "&order_id=" + orderID + "&id="
 	web.AssertNil(err)
 	record := []string{"Link sản phẩm", "Mã thẻ cào"}
 	b := &bytes.Buffer{}
@@ -86,7 +86,7 @@ func (s *AdminServer) generateCSV(c *gin.Context) {
 	} else {
 		for i := 0; i < quantity; i++ {
 			var encrypted, _ = security.Encrypt([]byte(common.CIPHER_KEY), order.CustomerID+"$$"+order.ProductID)
-			record = []string{endpointCheck + encrypted[:len(encrypted)-6], encrypted[len(encrypted)-6 : len(encrypted)]}
+			record = []string{endpointCheck + encrypted, encrypted[len(encrypted)-6 : len(encrypted)]}
 			wr.Write(record)
 		}
 	}
