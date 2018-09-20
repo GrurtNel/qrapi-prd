@@ -1,8 +1,8 @@
 package common
 
 const (
-	QRCOODE_MARKETING = "qrcode_type1"
-	QRCOODE_TYPE1     = "qrcode_type2"
-	QRCOODE_TYPE2     = "qrcode_type3"
+	QRCOODE_MARKETING = "qrcode-marketing"
+	QRCOODE_TYPE1     = "qrcode-type1"
+	QRCOODE_TYPE2     = "qrcode-type2"
 )
 const CIPHER_KEY = "trungyeulen4ever"

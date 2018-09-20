@@ -80,13 +80,14 @@ func (s *AdminServer) generateCSV(c *gin.Context) {
 		}
 	} else if order.Type == common.QRCOODE_TYPE1 {
 		for i := 0; i < quantity; i++ {
-			record = []string{order.URL, ""}
+			var encrypted, _ = security.Encrypt([]byte(common.CIPHER_KEY), order.CustomerID+"$$"+order.ProductID)
+			record = []string{endpointCheck + encrypted, encrypted[len(encrypted)-6 : len(encrypted)]}
 			wr.Write(record)
 		}
 	} else {
 		for i := 0; i < quantity; i++ {
 			var encrypted, _ = security.Encrypt([]byte(common.CIPHER_KEY), order.CustomerID+"$$"+order.ProductID)
-			record = []string{endpointCheck + encrypted, encrypted[len(encrypted)-6 : len(encrypted)]}
+			record = []string{endpointCheck + encrypted[0:len(encrypted)-6], encrypted[len(encrypted)-6 : len(encrypted)]}
 			wr.Write(record)
 		}
 	}
